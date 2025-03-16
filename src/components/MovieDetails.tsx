@@ -64,7 +64,7 @@ const MovieDetails = () => {
               <strong>Ratings:</strong>
             </p>
             <ul>
-              {movie.Ratings.map((rating, index) => (
+              {movie?.Ratings?.map((rating, index) => (
                 <li key={index} className='text-mutedText'>
                   {rating.Source}: {rating.Value}
                 </li>
