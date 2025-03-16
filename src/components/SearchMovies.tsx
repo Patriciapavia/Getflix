@@ -75,44 +75,54 @@ const SearchMovies = () => {
         </p>
       )}
       <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 mt-6'>
-        {data?.pages.flat().map((movie, index) => (
-          <div
-            key={movie.imdbID}
-            className='relative flex-none w-full p-2 sm:p-3 md:p-4 group transition-transform duration-300 hover:scale-105'
-          >
-            {/* Movie Poster */}
-            <Link to={`/movie/${movie.imdbID}`}>
-              <img
-                src={movie.Poster}
-                alt={movie.Title}
-                className='w-full h-[220px] sm:h-[260px] md:h-[320px] lg:h-[350px] object-cover rounded-lg shadow-lg'
-              />
-            </Link>
+        {!isLoading &&
+          (!data || data.pages.flat().length > 0 ? <></> : <h1>loading </h1>)}
+        {data?.pages.flat().map((movie, index) => {
+          const isLastMovie = index === data.pages.flat().length - 1;
+          return (
+            <div
+              key={movie.imdbID}
+              ref={isLastMovie ? lastMovieRef : null}
+              className='relative flex-none w-full p-2 sm:p-3 md:p-4 group transition-transform duration-300 hover:scale-105'
+            >
+              {/* Movie Poster */}
+              <Link to={`/movie/${movie.imdbID}`}>
+                <img
+                  src={movie.Poster}
+                  alt={movie.Title}
+                  className='w-full h-[220px] sm:h-[260px] md:h-[320px] lg:h-[350px] object-cover rounded-lg shadow-lg'
+                />
+              </Link>
 
-            {/* Movie Details */}
-            <div className='absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent text-white'>
-              <h3 className='text-lg font-semibold truncate'>{movie.Title}</h3>
-              <p className='text-gray-300 text-sm'>{movie.Year}</p>
+              {/* Movie Details */}
+              <div className='absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent text-white'>
+                <h3 className='text-lg font-semibold truncate'>
+                  {movie.Title}
+                </h3>
+                <p className='text-gray-300 text-sm'>{movie.Year}</p>
+              </div>
+
+              {/* Watchlist Button */}
+              <div className='absolute top-4 right-4'>
+                {watchlist.some((m) => m.imdbID === movie.imdbID) ? (
+                  <button
+                    onClick={() => removeFromWatchlist(movie.imdbID)}
+                    className='px-3 py-1 bg-gray-700 text-white text-sm font-semibold rounded-md transition-transform transform hover:scale-105 hover:bg-gray-600 flex items-center gap-2'
+                  >
+                    <FaCheck className='text-green-400' /> In Watchlist
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => addToWatchlist(movie)}
+                    className='px-3 py-1 bg-red-600 text-white text-sm font-semibold rounded-md transition-transform transform hover:scale-105 hover:bg-red-700 flex items-center gap-2'
+                  >
+                    <FaPlus /> Add
+                  </button>
+                )}
+              </div>
             </div>
-            <div className='absolute top-4 right-4'>
-              {watchlist.some((m) => m.imdbID === movie.imdbID) ? (
-                <button
-                  onClick={() => removeFromWatchlist(movie.imdbID)}
-                  className='px-3 py-1 bg-gray-700 text-white text-sm font-semibold rounded-md transition-transform transform hover:scale-105 hover:bg-gray-600 flex items-center gap-2'
-                >
-                  <FaCheck className='text-green-400' /> In Watchlist
-                </button>
-              ) : (
-                <button
-                  onClick={() => addToWatchlist(movie)}
-                  className='px-3 py-1 bg-red-600 text-white text-sm font-semibold rounded-md transition-transform transform hover:scale-105 hover:bg-red-700 flex items-center gap-2'
-                >
-                  <FaPlus /> Add
-                </button>
-              )}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {isFetchingNextPage && (
