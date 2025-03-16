@@ -1,8 +1,8 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, useEffect } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchMovies } from '../hooks/useFetchMovies';
-import { useWatchlistStore } from '../store/useWatchlistStore';
+import { useAppStore } from '../store/useAppStore';
 import { Link } from 'react-router-dom';
 import { FaPlus, FaCheck } from 'react-icons/fa';
 
@@ -12,8 +12,13 @@ const SearchMovies = () => {
   const [filterType, setFilterType] = useState<
     'movie' | 'series' | 'episode' | ''
   >('');
-  const { addToWatchlist, watchlist, removeFromWatchlist } =
-    useWatchlistStore();
+  const {
+    addToWatchlist,
+    watchlist,
+    removeFromWatchlist,
+    setSearchResults,
+    searchResults,
+  } = useAppStore();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
       refetchOnMount: true,
@@ -26,7 +31,12 @@ const SearchMovies = () => {
         lastPage?.length === 10 ? allPages.length + 1 : undefined,
       enabled: !!debouncedQuery || !!filterType,
     });
-
+  useEffect(() => {
+    if (data?.pages) {
+      setSearchResults(data.pages.flat());
+    }
+  }, [data, setSearchResults]);
+  console.log(searchResults);
   // Intersection Observer to detect when the last movie item is in view
   const observer = useRef<IntersectionObserver | null>(null);
   const lastMovieRef = useCallback(
@@ -76,9 +86,15 @@ const SearchMovies = () => {
       )}
       <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 mt-6'>
         {!isLoading &&
-          (!data || data.pages.flat().length > 0 ? <></> : <h1>loading </h1>)}
-        {data?.pages.flat().map((movie, index) => {
-          const isLastMovie = index === data.pages.flat().length - 1;
+          (!data || searchResults?.length > 0 ? (
+            <></>
+          ) : (
+            <div className='flex justify-center items-center w-full col-span-full p-4 text-center text-gray-500 dark:text-gray-400'>
+              <p>No matching titles found. Try searching for another title</p>
+            </div>
+          ))}
+        {searchResults?.map((movie, index) => {
+          const isLastMovie = index === searchResults?.length - 1;
           return (
             <div
               key={movie.imdbID}

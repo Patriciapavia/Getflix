@@ -3,13 +3,15 @@ import { persist } from 'zustand/middleware';
 import { devtools } from 'zustand/middleware';
 import { Movie } from '../types/movie';
 
-interface WatchlistState {
+interface AppState {
   watchlist: Movie[];
   addToWatchlist: (movie: Movie) => void;
   removeFromWatchlist: (id: string) => void;
+  searchResults: Movie[];
+  setSearchResults: (movies: Movie[]) => void;
 }
 
-export const useWatchlistStore = create<WatchlistState>()(
+export const useAppStore = create<AppState>()(
   devtools(
     persist(
       (set, get) => ({
@@ -22,8 +24,10 @@ export const useWatchlistStore = create<WatchlistState>()(
             watchlist: get().watchlist.filter((movie) => movie.imdbID !== id),
           });
         },
+        searchResults: [],
+        setSearchResults: (movies) => set({ searchResults: movies }),
       }),
-      { name: 'watchlist-storage' }
+      { name: 'app-storage' }
     )
   )
 );

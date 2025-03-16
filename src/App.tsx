@@ -4,11 +4,11 @@ import SearchMovies from './components/SearchMovies';
 import MovieDetails from './components/MovieDetails';
 import { ThemeProvider } from './context/ThemeContext';
 import ThemeToggle from './components/ThemeToggle';
-import { useWatchlistStore } from './store/useWatchlistStore';
+import { useAppStore } from './store/useAppStore';
 import { FaBookmark } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 function App() {
-  const { watchlist } = useWatchlistStore();
+  const { watchlist } = useAppStore();
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
