@@ -3,10 +3,13 @@ import { Movie } from '../types/movie';
 
 const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
 
-export const fetchMovies = async (query: string): Promise<Movie[]> => {
-  if (!query) return [];
+export const fetchMovies = async (
+  searchQuery: string,
+  page: number = 1
+): Promise<Movie[]> => {
+  if (!searchQuery) return [];
   const { data } = await axios.get<{ Search: Movie[] }>(
-    `https://www.omdbapi.com/?s=${query}&apikey=${API_KEY}`
+    `https://www.omdbapi.com/?s=${searchQuery}&page=${page}&apikey=${API_KEY}`
   );
   return data.Search || [];
 };
