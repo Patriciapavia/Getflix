@@ -2,9 +2,9 @@ import React, { useCallback, useRef, useState } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchMovies } from '../hooks/useFetchMovies';
-import { motion } from 'framer-motion';
 import { useWatchlistStore } from '../store/useWatchlistStore';
 import { Link } from 'react-router-dom';
+import { FaPlus, FaCheck } from 'react-icons/fa';
 
 const SearchMovies = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -74,58 +74,47 @@ const SearchMovies = () => {
           Loading...
         </p>
       )}
-      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mt-6'>
+      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 mt-6'>
         {data?.pages.flat().map((movie, index) => (
           <div
             key={movie.imdbID}
-            ref={
-              index === data.pages.flat().length - 1
-                ? (node) => lastMovieRef(node as HTMLDivElement)
-                : null
-            }
+            className='relative flex-none w-full p-2 sm:p-3 md:p-4 group transition-transform duration-300 hover:scale-105'
           >
-            <Link
-              to={`/movie/${movie.imdbID}`}
-              key={movie.imdbID}
-              className='border border-netflixRed rounded-lg overflow-hidden shadow-md bg-darkBg hover:bg-netflixRed transition-transform focus-within:ring-2 focus-within:ring-netflixRed'
-            >
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <img
-                  src={movie.Poster}
-                  alt={`Poster of ${movie.Title}`}
-                  className='w-full h-72 object-cover'
-                />
-                <div className='p-3 text-center'>
-                  <h3 className='text-lg font-semibold text-lightText'>
-                    {movie.Title}
-                  </h3>
-                  <p className='text-mutedText'>{movie.Year}</p>
-                </div>
-              </motion.div>
+            {/* Movie Poster */}
+            <Link to={`/movie/${movie.imdbID}`}>
+              <img
+                src={movie.Poster}
+                alt={movie.Title}
+                className='w-full h-[220px] sm:h-[260px] md:h-[320px] lg:h-[350px] object-cover rounded-lg shadow-lg'
+              />
             </Link>
-            <>
+
+            {/* Movie Details */}
+            <div className='absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent text-white'>
+              <h3 className='text-lg font-semibold truncate'>{movie.Title}</h3>
+              <p className='text-gray-300 text-sm'>{movie.Year}</p>
+            </div>
+            <div className='absolute top-4 right-4'>
               {watchlist.some((m) => m.imdbID === movie.imdbID) ? (
                 <button
                   onClick={() => removeFromWatchlist(movie.imdbID)}
-                  className='mt-2 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700'
+                  className='px-3 py-1 bg-gray-700 text-white text-sm font-semibold rounded-md transition-transform transform hover:scale-105 hover:bg-gray-600 flex items-center gap-2'
                 >
-                  Remove from Watchlist
+                  <FaCheck className='text-green-400' /> In Watchlist
                 </button>
               ) : (
                 <button
                   onClick={() => addToWatchlist(movie)}
-                  className='mt-2 px-4 py-2 bg-netflixRed text-white rounded-md hover:bg-red-700'
+                  className='px-3 py-1 bg-red-600 text-white text-sm font-semibold rounded-md transition-transform transform hover:scale-105 hover:bg-red-700 flex items-center gap-2'
                 >
-                  Add to Watchlist
+                  <FaPlus /> Add
                 </button>
               )}
-            </>
+            </div>
           </div>
         ))}
       </div>
+
       {isFetchingNextPage && (
         <p className='text-center mt-4 text-mutedText'>Loading more...</p>
       )}
