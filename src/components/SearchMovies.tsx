@@ -9,16 +9,22 @@ import { Link } from 'react-router-dom';
 const SearchMovies = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedQuery = useDebounce(searchQuery, 500);
+  const [filterType, setFilterType] = useState<
+    'movie' | 'series' | 'episode' | ''
+  >('');
   const { addToWatchlist, watchlist, removeFromWatchlist } =
     useWatchlistStore();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
+      refetchOnMount: true,
+      refetchOnWindowFocus: false,
       initialPageParam: 1,
-      queryKey: ['movies', debouncedQuery],
-      queryFn: ({ pageParam = 1 }) => fetchMovies(debouncedQuery, pageParam),
+      queryKey: ['movies', debouncedQuery, filterType],
+      queryFn: ({ pageParam = 1 }) =>
+        fetchMovies(debouncedQuery, pageParam, filterType),
       getNextPageParam: (lastPage, allPages) =>
         lastPage?.length === 10 ? allPages.length + 1 : undefined,
-      enabled: !!debouncedQuery,
+      enabled: !!debouncedQuery || !!filterType,
     });
 
   // Intersection Observer to detect when the last movie item is in view
@@ -38,6 +44,19 @@ const SearchMovies = () => {
   );
   return (
     <div className='p-4 max-w-6xl mx-auto bg-darkBg text-lightText min-h-screen'>
+      <select
+        id='movie-type'
+        value={filterType}
+        onChange={(e) =>
+          setFilterType(e.target.value as 'movie' | 'series' | 'episode' | '')
+        }
+        className='mb-4 p-2 border border-netflixRed rounded bg-darkBg text-lightText'
+      >
+        <option value=''>Select Type</option>
+        <option value='movie'>Movies</option>
+        <option value='series'>Series</option>
+        <option value='episode'>Episodes</option>
+      </select>
       <label htmlFor='movie-search' className='sr-only'>
         Search for a movie
       </label>
@@ -65,45 +84,45 @@ const SearchMovies = () => {
                 : null
             }
           >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className='border rounded-lg overflow-hidden shadow-md bg-secondary hover:bg-accent transition-transform focus-within:ring-2 focus-within:ring-blue-500'
-              tabIndex={0}
+            <Link
+              to={`/movie/${movie.imdbID}`}
+              key={movie.imdbID}
+              className='border border-netflixRed rounded-lg overflow-hidden shadow-md bg-darkBg hover:bg-netflixRed transition-transform focus-within:ring-2 focus-within:ring-netflixRed'
             >
-              <Link
-                to={`/movie/${movie.imdbID}`}
-                key={movie.imdbID}
-                className='block focus:outline-none'
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <img
                   src={movie.Poster}
                   alt={`Poster of ${movie.Title}`}
                   className='w-full h-72 object-cover'
                 />
-              </Link>
-              <div className='p-3 text-center'>
-                <h3 className='text-lg font-semibold text-lightText'>
-                  {movie.Title}
-                </h3>
-                <p className='text-mutedText'>{movie.Year}</p>
-                {watchlist.some((m) => m.imdbID === movie.imdbID) ? (
-                  <button
-                    onClick={() => removeFromWatchlist(movie.imdbID)}
-                    className='mt-2 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700'
-                  >
-                    Remove from Watchlist
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => addToWatchlist(movie)}
-                    className='mt-2 px-4 py-2 bg-netflixRed text-white rounded-md hover:bg-red-700'
-                  >
-                    Add to Watchlist
-                  </button>
-                )}
-              </div>
-            </motion.div>
+                <div className='p-3 text-center'>
+                  <h3 className='text-lg font-semibold text-lightText'>
+                    {movie.Title}
+                  </h3>
+                  <p className='text-mutedText'>{movie.Year}</p>
+                </div>
+              </motion.div>
+            </Link>
+            <>
+              {watchlist.some((m) => m.imdbID === movie.imdbID) ? (
+                <button
+                  onClick={() => removeFromWatchlist(movie.imdbID)}
+                  className='mt-2 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700'
+                >
+                  Remove from Watchlist
+                </button>
+              ) : (
+                <button
+                  onClick={() => addToWatchlist(movie)}
+                  className='mt-2 px-4 py-2 bg-netflixRed text-white rounded-md hover:bg-red-700'
+                >
+                  Add to Watchlist
+                </button>
+              )}
+            </>
           </div>
         ))}
       </div>
