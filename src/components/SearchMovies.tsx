@@ -36,7 +36,6 @@ const SearchMovies = () => {
       setSearchResults(data.pages.flat());
     }
   }, [data, setSearchResults]);
-  console.log(searchResults);
   // Intersection Observer to detect when the last movie item is in view
   const observer = useRef<IntersectionObserver | null>(null);
   const lastMovieRef = useCallback(
