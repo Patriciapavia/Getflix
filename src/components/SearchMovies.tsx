@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchMovies } from '../hooks/useFetchMovies';

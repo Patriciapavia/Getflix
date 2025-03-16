@@ -1,12 +1,12 @@
-import React from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 
 const ThemeContext = createContext({
   theme: 'light',
   toggleTheme: () => {},
 });
 
-export const ThemeProvider = ({ children }) => {
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState(
     localStorage.getItem('theme') ||
       (window.matchMedia('(prefers-color-scheme: dark)').matches
