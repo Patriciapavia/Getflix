@@ -10,3 +10,10 @@ export const fetchMovies = async (query: string): Promise<Movie[]> => {
   );
   return data.Search || [];
 };
+
+export const fetchMovieDetails = async (id: string): Promise<Movie> => {
+  const { data } = await axios.get<Movie>(
+    `https://www.omdbapi.com/?i=${id}&apikey=${API_KEY}`
+  );
+  return data;
+};
