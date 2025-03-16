@@ -25,9 +25,9 @@ function App() {
               <FaBookmark className='text-xl' /> Watchlist ({watchlist.length})
             </button>
             {showDropdown && (
-              <div className='absolute top-full mt-2 w-56 bg-white dark:bg-gray-800 shadow-md rounded-md p-2'>
+              <div className='absolute top-full mt-2 w-56 max-h-64 overflow-y-auto bg-white dark:bg-gray-800 shadow-md rounded-md p-2'>
                 {watchlist.length === 0 ? (
-                  <p className='text-gray-500 text-sm'>
+                  <p className='text-gray-500 text-sm text-center'>
                     No movies in watchlist
                   </p>
                 ) : (
