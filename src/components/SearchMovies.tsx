@@ -4,6 +4,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchMovies } from '../hooks/useFetchMovies';
 import { motion } from 'framer-motion';
 import { useWatchlistStore } from '../store/useWatchlistStore';
+import { Link } from 'react-router-dom';
 
 const SearchMovies = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -70,11 +71,17 @@ const SearchMovies = () => {
               className='border rounded-lg overflow-hidden shadow-md bg-secondary hover:bg-accent transition-transform focus-within:ring-2 focus-within:ring-blue-500'
               tabIndex={0}
             >
-              <img
-                src={movie.Poster}
-                alt={`Poster of ${movie.Title}`}
-                className='w-full h-72 object-cover'
-              />
+              <Link
+                to={`/movie/${movie.imdbID}`}
+                key={movie.imdbID}
+                className='block focus:outline-none'
+              >
+                <img
+                  src={movie.Poster}
+                  alt={`Poster of ${movie.Title}`}
+                  className='w-full h-72 object-cover'
+                />
+              </Link>
               <div className='p-3 text-center'>
                 <h3 className='text-lg font-semibold text-lightText'>
                   {movie.Title}

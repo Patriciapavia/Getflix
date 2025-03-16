@@ -36,7 +36,7 @@ const MovieDetails = () => {
             className='w-64 rounded-lg shadow-md'
           />
           <div>
-            <h1 className='text-3xl font-bold' tabIndex={0}>
+            <h1 className='text-3xl font-bold'>
               {movie.Title} ({movie.Year})
             </h1>
             <p className='mt-2'>
@@ -54,6 +54,22 @@ const MovieDetails = () => {
             <p>
               <strong>IMDB Rating:</strong> {movie.imdbRating}
             </p>
+            <p>
+              <strong>Runtime:</strong> {movie.Runtime}
+            </p>
+            <p>
+              <strong>Awards:</strong> {movie.Awards}
+            </p>
+            <p>
+              <strong>Ratings:</strong>
+            </p>
+            <ul>
+              {movie.Ratings.map((rating, index) => (
+                <li key={index} className='text-mutedText'>
+                  {rating.Source}: {rating.Value}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       )}
