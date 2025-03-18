@@ -1,65 +1,45 @@
-# Take-home Exercise
+# Getflix 🎬 - Movie Search App
 
-## Introduction
+Getflix is a React 19 application that allows users to search for movies, view detailed information, and manage a personal watchlist.
 
-As part of the hiring process, you are provided with a coding exercise to complete and submit. This exercise is designed to assess your ability to work with React and external APIs, as well as your problem-solving and UI/UX implementation skills.
+## 🚀 Features
 
-This repository includes a basic React web app template as your starting point. You are free to install any libraries or tools you find useful (e.g., state management solutions, UI frameworks, CSS libraries).
+✔️ **Movie Search** - Search for movies using the OMDb API
+✔️ **Infinite Scroll** - Loads more results as you scroll
+✔️ **Movie Details Page** - View detailed information about each movie
+✔️ **Watchlist** - Add and remove movies from your watchlist
+✔️ **Dark Mode** - Toggle between light and dark themes
+✔️ **Debounced Search** - Reduces API calls when typing
+✔️ **Persisted Search Results** - Retain search results when navigating back
+✔️ **Responsive Design** - Optimized for all screen sizes
 
-## Goals
+## 🛠️ Tech Stack
 
-Build a **single-page application** called **Getflix**, which allows users to search for movies and view detailed information about each title. The application should:
+- **React 19** + **TypeScript**
+- **React Router** for navigation
+- **React Query** for API data fetching & caching
+- **Zustand** - State management for watchlist and search persistence
+- **Framer Motion** for smooth animations
+- **Vitest + React Testing Library** for unit testing
+- **Tailwind CSS** for styling
 
-1. Provide a search input where users can enter movie titles.
-2. Display matching results, including the movie title, poster, and release year.
-3. Allow users to click on a movie to view more details, such as the plot, cast, and other relevant information.
-4. Ensure the UI is responsive across different screen sizes.
+## Installation & Setup
 
-## Stretch Goals (Bonus Features)
+# Clone the repository
 
-- Implement **infinite scrolling** to load additional results dynamically. The API currently returns titles in lots of 10 - if you can, use the page parameter to request more as you scroll.
-- Add **debounced search** to optimize API requests.
-- Include **animations/transitions** for improved UI/UX.
-- Enable the user to create and manage a watchlist of movies saved in local storage or a database of your choice. It should persist across browser refreshes.
-- Utilize additional values from the API response, such as ratings, awards, and runtime, to create more engaging and informative movie details.
-- Implement a filter using the **type** query parameter to allow users to return only movies, series, or episodes.
-- Implement a theme switcher to allow users to toggle between light and dark mode.
-- Ensure the app meets accessibility standards, including keyboard navigation and screen reader support.
-- Write **unit tests** using Jest, React Testing Library, Vitest or any library of your choice.
-- Deploy the application to **Vercel, Netlify, or GitHub Pages**.
+git clone https://github.com/Patriciapavia/Getflix.git
+cd Getflix
 
-## API Details
+# Install dependencies
 
-Use the [OMDb API](https://www.omdbapi.com/) to fetch movie data. You can register for your own API key or use this provided key: **320f6ab2**
+npm install
 
-Example API requests:
+## Set Up Environment Variables
 
-- Search movies: `https://www.omdbapi.com/?s=Inception&apikey=320f6ab2`
-- Get movie details: `https://www.omdbapi.com/?i=tt1375666&apikey=320f6ab2`
+Create a .env file in the root directory and add your OMDb API Key:
 
-## Requirements
+VITE_OMDB_API_KEY="320f6ab2"
 
-- Use **React 19** with **TypeScript**.
-- Implement **client-side routing** (e.g., React Router) for navigating between search results and movie details.
-- Write clean, maintainable code with appropriate documentation.
-- Ensure that commit messages in the Git repository are clear and descriptive, providing context for each change made.
-- Provide a clear **README** with setup and usage instructions.
+## Start the Development Server
 
-## Submission Guidelines
-
-When you’re done, please submit your project via one of the following methods:
-
-- **GitHub Repository:** Share a public repository link, with clear commit messages.
-- **Zip File:** Should be a Git repository, with clear commit messages.
-
-Make sure to include instructions on how to run the application and any relevant dependencies.
-
-## License
-
-**Copyright 2025 Tyro Payments Limited**
-
-Licensed under the Apache License, Version 2.0. See the [LICENSE](http://www.apache.org/licenses/LICENSE-2.0) for details.
-
----
-
-We look forward to seeing your submission! 🚀
+npm run dev
